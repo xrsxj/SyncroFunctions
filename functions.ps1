@@ -106,40 +106,21 @@ function GetDomainStructure ([string]$dn, $level = 1) {
 function GetSyncContacts() {
     $i = 1
     $contacts = New-Object System.Collections.Generic.List[System.Object]
-    while ($i -lt 9999) {
-        try {
-            $newcontacts = (Invoke-Restmethod -Uri "$($syncrourl)/contacts?api_key=$($syncrokey)&page=$i" -ContentType "application/json")
-            if ($null -ne $newcontacts -and $newcontacts.contacts.count -eq 0) {
-                $newcontacts = $newcontacts | ConvertFrom-Json -AsHashTable
-            }
-        }
-        catch {
-            $newcontacts > $null
-        }
+    do {
+        $newcontacts = (Invoke-Restmethod -Uri "$($syncrourl)/contacts?page=$i" -ContentType "application/json" -Headers $syncroheads)
         $contacts += $newcontacts.contacts
-        if ($($newcontacts.contacts ).count -lt 50) {
-            break
-        }
         $i++
-    }
+    } while ($newcontacts.contacts.count -ne 0)
     return $contacts
 }
 function GetAssets() {
     $i = 1
     $assets = New-Object System.Collections.Generic.List[System.Object]
-    while ($i -lt 9999) {
-        try {
-            $newassets = ((Invoke-WebRequest -UseBasicParsing -Uri "$($huduurl)/companies/$($huduid)/assets?page=$i&page_size=999" -Headers $huduheads) -creplace "CrashPlan", "CrashPlan2" | ConvertFrom-Json)
-        }
-        catch {
-            $newassets > $null
-        }
+    do {
+        $newassets = ((Invoke-WebRequest -Uri  "$($huduurl)/companies/$($company.id)/assets?page=$i&page_size=999" -Headers $huduheads) -creplace "CrashPlan", "CrashPlan2" | ConvertFrom-Json)
         $assets += $newassets.assets
-        if ($($newassets.assets).count -lt 25) {
-            break
-        }
         $i++
-    }
+    } while ($newassets.assets.count -ne 0)
     return $assets
 }
 function Ping-IPRange {
