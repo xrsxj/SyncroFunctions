@@ -110,16 +110,26 @@ function GetSyncContacts() {
         $newcontacts = (Invoke-Restmethod -Uri "$($syncrourl)/contacts?page=$i" -ContentType "application/json" -Headers $syncroheads)
         $contacts += $newcontacts.contacts
         $i++
-    } while ($newcontacts.contacts.count -ne 0)
+    } while ($newcontacts.contacts.count -ne $newcontacts.meta.per_page)
     return $contacts
 }
 function GetAssets() {
     $i = 1
     $assets = New-Object System.Collections.Generic.List[System.Object]
     do {
-        $newassets = ((Invoke-WebRequest -Uri  "$($huduurl)/companies/$($company.id)/assets?page=$i&page_size=999" -Headers $huduheads) -creplace "CrashPlan", "CrashPlan2" | ConvertFrom-Json)
+        #$newassets = ((Invoke-WebRequest -Uri  "$($huduurl)/companies/$($company.id)/assets?page=$i&page_size=999" -Headers $huduheads) -creplace "CrashPlan", "CrashPlan2" | ConvertFrom-Json)
+        $tempassets = (Invoke-RestMethod -Uri  "$($huduurl)/companies/$($company.id)/assets?page=$i&page_size=999" -Headers $huduheads)
+        if ($tempassets.assets.count -eq 0) {
+            try {
+                $tempassets = $tempassets -creplace "CrashPlan", "CrashPlan2" | ConvertFrom-Json
+            } catch {
+                break
+            }
+        }
+        $newassets = $tempassets
         $assets += $newassets.assets
         $i++
+        $newassets.assets.count
     } while ($newassets.assets.count -ne 0)
     return $assets
 }
