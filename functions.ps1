@@ -107,7 +107,7 @@ function GetSyncContacts() {
     $i = 1
     $contacts = New-Object System.Collections.Generic.List[System.Object]
     do {
-        $newcontacts = (Invoke-Restmethod -Uri "$($syncrourl)/contacts?page=$i" -ContentType "application/json" -Headers $syncroheads)
+        $newcontacts = (Invoke-Restmethod -Uri "$($syncrourl)/contacts?customer_id=$($customer_id)&page=$i" -ContentType "application/json" -Headers $syncroheads)
         $contacts += $newcontacts.contacts
         $i++
     } while ($newcontacts.contacts.count -ne $newcontacts.meta.per_page)
