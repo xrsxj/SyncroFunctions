@@ -110,7 +110,7 @@ function GetSyncContacts() {
         $newcontacts = (Invoke-Restmethod -Uri "$($syncrourl)/contacts?customer_id=$($customer_id)&page=$i" -ContentType "application/json" -Headers $syncroheads)
         $contacts += $newcontacts.contacts
         $i++
-    } while ($newcontacts.contacts.count -ne $newcontacts.meta.per_page)
+    } while ($newcontacts.contacts.count -eq $newcontacts.meta.per_page)
     return $contacts
 }
 function GetAssets() {
