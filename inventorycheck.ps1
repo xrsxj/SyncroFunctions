@@ -41,27 +41,6 @@ ProduKey.exe @ c:\Windows\Temp\ProduKey.exe
 
 #>
 
-# Save QB License Info
-Write-Host "Checking for QB License"
-if (Test-Path -Path "C:\ProgramData\COMMON FILES\INTUIT\QUICKBOOKS\qbregistration.dat") {
-    Write-Host "QB License found... documenting"
-    Rmm-Alert -Category 'record_qb' -Body 'Document QB License!'
-}
-
-# Check for Shares
-Write-Host "Checking for File Shares"
-if ((Get-SMBShare | Where-Object {$_.ShareType -eq "FileSystemDirectory" -and $km_.Special -eq $false}).count -ne 0) {
-    Write-Host "File Shares found..... Documenting."
-    Rmm-Alert -Category 'record_shares' -Body 'Document File Shares!'
-}
-
-# Check if DC
-Write-Host "Check if DC..."
-if ((Get-WmiObject -Class Win32_OperatingSystem).ProductType -eq 2) {
-    Write-Host "DC FOUND!!!! Documenting"
-    Rmm-Alert -Category 'record_ads' -Body 'Document ADS Information!'
-}
-
 # Set Architecture
 $Arch = (Get-Process -Id $PID).StartInfo.EnvironmentVariables["PROCESSOR_ARCHITECTURE"];
 
