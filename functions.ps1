@@ -121,7 +121,7 @@ function GetAssets() {
         $tempassets = (Invoke-RestMethod -Uri  "$($huduurl)/companies/$($company.id)/assets?page=$i&page_size=999" -Headers $huduheads)
         if ($tempassets.assets.count -eq 0) {
             try {
-                $tempassets = $tempassets -creplace "CrashPlan", "CrashPlan2" | ConvertFrom-Json
+                $tempassets = $tempassets -creplace "CrashPlan", "CrashPlan2" -creplace "os", "os2" | ConvertFrom-Json
             } catch {
                 break
             }
