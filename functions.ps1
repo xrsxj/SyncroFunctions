@@ -4,12 +4,10 @@ function WriteAssets() {
         if ($oldassets.count -gt 1 -and $oldassets[0].fields) {
             foreach ($oldasset in $oldassets) {
                 try {
-                    $response = (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets/$($oldasset.id)" -Method DELETE -Headers $huduheads)
+                    (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets/$($oldasset.id)" -Method DELETE -Headers $huduheads)
                 }
                 catch {
                     Write-Host "Failed to DELETE $($body.asset.name)"
-                    $response
-                    $body | ConvertTo-Json -depth 6
                 }
             }
             try {
@@ -18,8 +16,8 @@ function WriteAssets() {
             }
             catch {
                 Write-Host "Failed to CREATE $($body.asset.name)"
-                (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets" -Method POST -Headers $huduheads -Body $($body | ConvertTo-Json -depth 6)).data
                 $body | ConvertTo-Json -depth 6
+                (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets" -Method POST -Headers $huduheads -Body $($body | ConvertTo-Json -depth 6)).data
             }
         }
         elseif ($oldassets) {
@@ -60,8 +58,8 @@ function WriteAssets() {
                 }
                 catch {
                     Write-Host "Failed to UPDATE $($body.asset.name)"
-                    (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets/$($oldassets.id)" -Method PUT -Headers  $huduheads -Body $($body | ConvertTo-Json -depth 6)).data
                     $body | ConvertTo-Json -depth 6
+                    (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets/$($oldassets.id)" -Method PUT -Headers  $huduheads -Body $($body | ConvertTo-Json -depth 6)).data
                 }
             }
         }
@@ -72,8 +70,9 @@ function WriteAssets() {
             }
             catch {
                 Write-Host "Failed to CREATE $($body.asset.name)"
-                (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets" -Method POST -Headers  $huduheads -Body $($body | ConvertTo-Json -depth 6)).data
+                "$($huduurl)/companies/$($huduid)/assets"
                 $body | ConvertTo-Json -depth 6
+                (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets" -Method POST -Headers  $huduheads -Body $($body | ConvertTo-Json -depth 6)).data
             }
         }
     }
