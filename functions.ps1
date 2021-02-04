@@ -4,25 +4,22 @@ function WriteAssets() {
         if ($oldassets.count -gt 1 -and $oldassets[0].fields) {
             foreach ($oldasset in $oldassets) {
                 try {
-                    (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets/$($oldasset.id)" -Method DELETE -Headers $huduheads).data                           
+                    $response = (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets/$($oldasset.id)" -Method DELETE -Headers $huduheads)
                 }
                 catch {
                     Write-Host "Failed to DELETE $($body.asset.name)"
-                    Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__ 
-                    Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription
-                    Write-Host "Status:" $_.Exception.Response
+                    $response
                     $body | ConvertTo-Json -depth 6
                 }
             }
             try {
                 Write-Host "Re-Creating $name"
-                (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets" -Method POST -Headers    $huduheads -Body $($body | ConvertTo-Json -depth 6)).data
+                $response = (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets" -Method POST -Headers $huduheads -Body $($body | ConvertTo-Json -depth 6))
             }
             catch {
                 Write-Host "Failed to CREATE $($body.asset.name)"
                 Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__ 
-                Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription
-                Write-Host "Status:" $_.Exception.Response
+                $response
                 $body | ConvertTo-Json -depth 6
             }
         }
@@ -60,13 +57,11 @@ function WriteAssets() {
             if ($body.asset.fields) {
                 try {
                     Write-Host "Updating $($company.name) $name"
-                    (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets/$($oldassets.id)" -Method PUT -Headers  $huduheads -Body $($body | ConvertTo-Json -depth 6)).data
+                    $response = (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets/$($oldassets.id)" -Method PUT -Headers  $huduheads -Body $($body | ConvertTo-Json -depth 6))
                 }
                 catch {
                     Write-Host "Failed to UPDATE $($body.asset.name)"
-                    Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__ 
-                    Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription
-                    Write-Host "Status:" $_.Exception.Response
+                    $response
                     $body | ConvertTo-Json -depth 6
                 }
             }
@@ -74,13 +69,11 @@ function WriteAssets() {
         else {
             try {
                 Write-Host "Creating $name"
-                (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets" -Method POST -Headers  $huduheads -Body $($body | ConvertTo-Json -depth 6)).data
+                $response = (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets" -Method POST -Headers  $huduheads -Body $($body | ConvertTo-Json -depth 6))
             }
             catch {
                 Write-Host "Failed to CREATE $($body.asset.name)"
-                Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__ 
-                Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription
-                Write-Host "Status:" $_.Exception.Response
+                $response
                 $body | ConvertTo-Json -depth 6
             }
         }
