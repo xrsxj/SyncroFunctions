@@ -8,6 +8,7 @@ function WriteAssets() {
                 }
                 catch {
                     Write-Host "Failed to DELETE $($body.asset.name)"
+                    $body | ConvertTo-Json -depth 6
                 }
             }
             try {
@@ -16,6 +17,7 @@ function WriteAssets() {
             }
             catch {
                 Write-Host "Failed to CREATE $($body.asset.name)"
+                $body | ConvertTo-Json -depth 6
             }
         }
         elseif ($oldassets) {
@@ -56,6 +58,7 @@ function WriteAssets() {
                 }
                 catch {
                     Write-Host "Failed to UPDATE $($body.asset.name)"
+                    $body | ConvertTo-Json -depth 6
                 }
             }
         }
@@ -66,6 +69,7 @@ function WriteAssets() {
             }
             catch {
                 Write-Host "Failed to CREATE $($body.asset.name)"
+                $body | ConvertTo-Json -depth 6
             }
         }
     }
