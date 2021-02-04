@@ -8,6 +8,8 @@ function WriteAssets() {
                 }
                 catch {
                     Write-Host "Failed to DELETE $($body.asset.name)"
+                    Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__ 
+                    Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription
                     $body | ConvertTo-Json -depth 6
                 }
             }
@@ -17,6 +19,8 @@ function WriteAssets() {
             }
             catch {
                 Write-Host "Failed to CREATE $($body.asset.name)"
+                Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__ 
+                Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription
                 $body | ConvertTo-Json -depth 6
             }
         }
@@ -58,6 +62,8 @@ function WriteAssets() {
                 }
                 catch {
                     Write-Host "Failed to UPDATE $($body.asset.name)"
+                    Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__ 
+                    Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription
                     $body | ConvertTo-Json -depth 6
                 }
             }
@@ -69,6 +75,8 @@ function WriteAssets() {
             }
             catch {
                 Write-Host "Failed to CREATE $($body.asset.name)"
+                Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__ 
+                Write-Host "StatusDescription:" $_.Exception.Response.StatusDescription
                 $body | ConvertTo-Json -depth 6
             }
         }
