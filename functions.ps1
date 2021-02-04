@@ -14,12 +14,11 @@ function WriteAssets() {
             }
             try {
                 Write-Host "Re-Creating $name"
-                $response = (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets" -Method POST -Headers $huduheads -Body $($body | ConvertTo-Json -depth 6))
+                (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets" -Method POST -Headers $huduheads -Body $($body | ConvertTo-Json -depth 6)).data
             }
             catch {
                 Write-Host "Failed to CREATE $($body.asset.name)"
-                Write-Host "StatusCode:" $_.Exception.Response.StatusCode.value__ 
-                $response
+                (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets" -Method POST -Headers $huduheads -Body $($body | ConvertTo-Json -depth 6)).data
                 $body | ConvertTo-Json -depth 6
             }
         }
@@ -57,11 +56,11 @@ function WriteAssets() {
             if ($body.asset.fields) {
                 try {
                     Write-Host "Updating $($company.name) $name"
-                    $response = (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets/$($oldassets.id)" -Method PUT -Headers  $huduheads -Body $($body | ConvertTo-Json -depth 6))
+                    (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets/$($oldassets.id)" -Method PUT -Headers  $huduheads -Body $($body | ConvertTo-Json -depth 6)).data
                 }
                 catch {
                     Write-Host "Failed to UPDATE $($body.asset.name)"
-                    $response
+                    (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets/$($oldassets.id)" -Method PUT -Headers  $huduheads -Body $($body | ConvertTo-Json -depth 6)).data
                     $body | ConvertTo-Json -depth 6
                 }
             }
@@ -69,11 +68,11 @@ function WriteAssets() {
         else {
             try {
                 Write-Host "Creating $name"
-                $response = (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets" -Method POST -Headers  $huduheads -Body $($body | ConvertTo-Json -depth 6))
+                (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets" -Method POST -Headers  $huduheads -Body $($body | ConvertTo-Json -depth 6)).data
             }
             catch {
                 Write-Host "Failed to CREATE $($body.asset.name)"
-                $response
+                (Invoke-Restmethod -Uri "$($huduurl)/companies/$($huduid)/assets" -Method POST -Headers  $huduheads -Body $($body | ConvertTo-Json -depth 6)).data
                 $body | ConvertTo-Json -depth 6
             }
         }
